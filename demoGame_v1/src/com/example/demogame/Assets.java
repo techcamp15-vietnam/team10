@@ -12,8 +12,8 @@ import com.Group10.framework.Sound;
 
 public class Assets {
 
-	public static Image menugame;
-	public static Image menuHitButton;
+	public static Image menugame, SinglePlayerBackground, MultiPlayerBackground, SettingBackground;
+	public static Image menuSinglePlayerButton, menuMultiplayerButton, menuSettingButton;
 	public static Sound click;
 	public static Music theme;
 

@@ -13,4 +13,6 @@ public interface Image {
     public int getHeight();
     public ImageFormat getFormat();
     public void dispose();
+    public void setid(int id);
+    public int getid();
 }

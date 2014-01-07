@@ -13,12 +13,26 @@ import com.Group10.framework.Graphics.ImageFormat;
 public class AndroidImage implements Image {
     Bitmap bitmap;
     ImageFormat format;
+    int id;
     
     public AndroidImage(Bitmap bitmap, ImageFormat format) {
         this.bitmap = bitmap;
         this.format = format;
     }
 
+	@Override
+	public void setid(int id) {
+		// TODO Auto-generated method stub
+		this.id = id;
+	}  
+    
+
+	@Override
+	public int getid() {
+		// TODO Auto-generated method stub
+		return this.id;
+	}
+	
     @Override
     public int getWidth() {
         return bitmap.getWidth();
@@ -37,5 +51,8 @@ public class AndroidImage implements Image {
     @Override
     public void dispose() {
         bitmap.recycle();
-    }      
+    }
+
+
+    
 }
