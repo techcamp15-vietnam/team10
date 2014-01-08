@@ -33,5 +33,9 @@ public interface Graphics {
 	public int getHeight();
 
 	public void drawARGB(int i, int j, int k, int l);
+	
+  	public void drawFlipImage(Image Image, int x, int y); 
+  	
+  	public void drawFlipString(String str, int x, int y);
 
 }

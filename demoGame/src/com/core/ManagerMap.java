@@ -1,5 +1,6 @@
 package com.core;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -21,13 +22,20 @@ public class ManagerMap {
 	{
 		numHoles = numholes;
 		holeslist = new ManagerHoles[numHoles];
+		int[] holex = new int[numholes];
+		System.out.println("so holes la : " + numholes);
+		holex = randomm(100, null, numholes);
+		System.out.println("end holex: ");
+		//holey = randomm(8, null, numholes);
 		for (int i=0; i<numHoles; i++)
 		{
+			System.out.println("toa do la : "+ 100/10 +" "+ 100%10 + holex[i]);
 			holeslist[i] = new ManagerHoles();
-			holeslist[i].setHole(customRandom(10,0), customRandom(10,1));
+			//System.out.println("toa do la : "+ holex[numholes]/10 +" "+ holey[numholes]/8);
+			holeslist[i].setHole(holex[i]/10, holex[i]%10);
 		}
 	}
-	/**
+	/**	
 	 init target
 	@param initwithtarget 
 	@author 10-B Phan Ha
@@ -36,18 +44,19 @@ public class ManagerMap {
 	{
 		numTarget = numtarget;
 		targetlist = new ManagerTarget[numTarget];
-		
+		int[] targetx = new int[numtarget];
+		targetx = randomm(numHoles, null, numtarget);
 		for (int i=0; i<numTarget/2; i++)
 		{
-			int pos = customRandom(numHoles, 3 );
-			Hole h = holeslist[pos].getHole();
+			//int pos = customRandom(numHoles, 3 );
+			Hole h = holeslist[targetx[i]].getHole();
 			targetlist[i] = new ManagerTarget();
 			targetlist[i].setTarget(h.getX(), h.getY(), 0);
 			//System.out.print(i +"   " + targetlist[i].getTarget().getType() + "\n");
 		}
 		for (int j = numTarget/2; j < numTarget; j++) {
-			int pos = customRandom(numHoles, 3 );
-			Hole h = holeslist[pos].getHole();			
+			//int pos = customRandom(numHoles, 3 );
+			Hole h = holeslist[targetx[j]].getHole();			
 			targetlist[j] = new ManagerTarget();
 			targetlist[j].setTarget(h.getX(), h.getY(), 1);
 			//System.out.print(j +"   " + targetlist[j].getTarget().getType() + "\n");
@@ -60,10 +69,8 @@ public class ManagerMap {
 	*/
 	public ManagerTarget[] gettargetlist()
 	{
-		/*
 		for(int i = 0; i<10; i++)
 			System.out.print(i +"   " + targetlist[i].getTarget().getType() + "   "+ targetlist[i].getTarget().getX() + "   " + targetlist[i].getTarget().getY()+ "\n");
-		*/
 		return targetlist;
 	}
 	/**
@@ -79,19 +86,6 @@ public class ManagerMap {
 	 check target
 	@param checkTarget
 	@author 10-B Phan Ha
-	*/
-	/*
-	public Boolean checkTarget(int x, int y, int type)
-	{
-		for (int i = 0; i < numTarget; i++) {
-			Target temptg = targetlist[i].getTarget();
-			if (temptg.getX() == x && temptg.getY() == y) {
-				 if (temptg.getType() == type)
-					 return true;
-			}
-		}
-		return false;
-	}
 	*/
 	public  int checkTarget(int x, int y)
 	{
@@ -110,68 +104,62 @@ public class ManagerMap {
 	*/
 	public void changePos(int i)
 	{
-		int pos = customRandom(numHoles, 3);
-		Hole h = holeslist[pos].getHole();
+		int[] posArr =new int[numTarget];
+		//khoi tao random postion. khong bi trung voi cac vi tri target khac.
+		// lay duoc mang vi tri cac target
+		for (int j = 0; j < numTarget; j++) {
+			int holepos = targetlist[j].getTarget().getY() *10 + targetlist[j].getTarget().getX();
+			posArr[i] = holepos;
+			System.out.println("hole postion " + holepos);
+		}
+		int[] pos = randomm(numHoles, posArr, 1);
+		System.out.println(pos[0]);
+		Hole h = holeslist[pos[0]].getHole();
 		Target temptg = targetlist[i].getTarget();
 		targetlist[i].setTarget(h.getX(), h.getY(), temptg.getType());
 	}
 	
-	private int customRandom(int range, int t)
-	{
-		Random rand = new Random();
-		int ran = rand.nextInt(range);
-		int[]  a = new int[range]; 
-		if (t == 3) {
-			for (int i = 0; i < numHoles; i++) {
-				Hole temptg = holeslist[i].getHole();
-					a[i] = temptg.getX();
+	public int[] randomm(int max,int[] intArray, int num){
+	    ArrayList<Integer> list = new ArrayList<Integer>(max);
+	    int[] result = new int[num];
+	    Random ran = new Random();
+    	for(int i = 0; i <= max; i++) {
+	        list.add(i);
+	    }
+	    if(intArray != null)
+	    {
+	    	System.out.println( "khoong log doan nay");
+		    for (int i = 0; i < intArray.length; i++) {
+		    	//System.out.println(intArray[i]);
+		    	for(int j = 0; j <= max; j++) {
+		            if(intArray[i] == list.get(j))
+		            {
+		            	list.remove(j);
+		            	max = max -1;
+		            }
+		        }
 			}
-			for (int i = 0; i < numHoles; i++) {
-				if(ran == a[i])
-				{
-					ran = rand.nextInt(range);
-				}
+		   // System.out.println(intArray.length);
+		    for(int i = 0; i < num; i++) {
+		    	System.out.println(num);
+		    	int x = ran.nextInt(max);
+		    	System.out.println(x);
+		    	result[i] = list.remove(x);
+		    	System.out.println(result[i]);
+		    	max = max -1;
+		    }
+	    }    
+	    else 
+	    {
+	    	System.out.println( "log doan nay");
+	    	for (int i = 0; i < num; i++) {
+	    		 int x = ran.nextInt(max);
+	    		result[i] = list.remove(x);
+	    		max = max -1;
 			}
-		}
-		else
-		{
-			for (int i = 0; i < numTarget; i++) {
-				Target temptg = targetlist[i].getTarget();
-				if(t == 0)
-				{
-					a[i] = temptg.getX();
-				}
-				else 
-				{
-					a[i] = temptg.getY();
-				}
-			}
-			for (int i = 0; i < numTarget; i++) {
-				if(ran == a[i])
-				{
-					ran = rand.nextInt(range);
-				}
-			}
-		}
-		return ran;
-	}
-	/**
-	 add target
-	@param addTarget
-	@author 10-B Phan Ha
-	*/
-	private void addTargetatPos(int x, int y, int type, int pos) 
-	{
-		targetlist[pos].setTarget(x, y, type);
-	}
-	/**
-	 remove target
-	@param removeTaget
-	@author 10-B Phan Ha
-	*/
-	public void removeTagetatPos(int x, int y, int pos)
-	{
-		
+	    }
+	    System.out.println("end random");
+	    return result;
 	}
 	/**
 	 check map clean

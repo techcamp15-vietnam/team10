@@ -9,9 +9,11 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
+import android.util.Base64;
 
 import com.Group10.framework.Graphics;
 import com.Group10.framework.Image;
@@ -149,4 +151,38 @@ public class AndroidGraphics implements Graphics {
     public int getHeight() {
         return frameBuffer.getHeight();
     }
+    
+  //flip image for multiplayer
+    @Override
+  	public void drawFlipImage(Image Image, int x, int y) {
+	    Bitmap bmp= ((AndroidImage)Image).bitmap;//bitmap luu tru ho
+		//Canvas canvas = new Canvas(bmp);
+		Matrix matrix = new Matrix ();
+		matrix.postRotate (180);
+		Bitmap rotatedBitmap = Bitmap.createBitmap (bmp, 0, 0,bmp.getWidth (), bmp.getHeight (), matrix, true);
+        canvas.drawBitmap(rotatedBitmap, x, y, null);
+    }
+    
+
+    @Override
+  	public void drawFlipString(String str, int x, int y) {
+	    Bitmap bmp= StringToBitMap(str);//bitmap luu tru ho
+		//Canvas canvas = new Canvas(bmp);
+		Matrix matrix = new Matrix ();
+		matrix.postRotate (180);
+		Bitmap rotatedBitmap = Bitmap.createBitmap (bmp, 0, 0,bmp.getWidth (), bmp.getHeight (), matrix, true);
+        canvas.drawBitmap(rotatedBitmap, x, y, null);
+    }
+    
+    
+    public Bitmap StringToBitMap(String encodedString){
+        try{
+          byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
+          Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+          return bitmap;
+        }catch(Exception e){
+          e.getMessage();
+          return null;
+        }
+         }
 }

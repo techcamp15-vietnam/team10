@@ -100,7 +100,7 @@ public class loadgamescreen extends Screen{
 				{
 					if(Assets.menuMultiplayerButton.getid()==1) {
 						Assets.menuMultiplayerButton = g.newImage("menuMultiplayerButton.png", ImageFormat.RGB565);
-						game.setScreen(new MultiPlayerScreen(game));
+						game.setScreen(new ReadyMultiPlayerScreen(game));
 					}
 				}
 				else
@@ -201,7 +201,7 @@ public class loadgamescreen extends Screen{
 	@Override
 	public void backButton() {
 		// TODO Auto-generated method stub
-		
+        android.os.Process.killProcess(android.os.Process.myPid());
 	}
 
 }

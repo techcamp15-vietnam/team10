@@ -12,6 +12,7 @@ import com.example.motion.Animation;
 
 public class ChoosePlayerScreen extends Screen {
 	public Image player1_0,player1_1, player1_2, player1_3,player1_4, player2_0,player2_1, player2_2, player2_3, player2_4;
+	public Image chooseTeam;
 	public Animation player1, player2;
 	
 	/**
@@ -35,6 +36,7 @@ public class ChoosePlayerScreen extends Screen {
 		player2_2 = g.newImage("target2_intro2.png", ImageFormat.RGB565);
 		player2_3 = g.newImage("target2_intro3.png", ImageFormat.RGB565);
 		player2_4 = g.newImage("target2_intro4.png", ImageFormat.RGB565);
+		chooseTeam = g.newImage("chooseTeamText.png", ImageFormat.RGB565);
 		
 		player1 = new Animation();
 		player1.addFrame(player1_0, 300);
@@ -102,7 +104,7 @@ public class ChoosePlayerScreen extends Screen {
 		g.drawImage(Assets.ChoosePlayerBackGround, 0, 0);
 		g.drawImage(player1.getImage(), 240, 180); //560>x>240, 420>y>180
 		g.drawImage(player2.getImage(), 240, 860); //560>x>240, 1100>y>860
-		// TODO Auto-generated method stub
+		g.drawImage(chooseTeam, 100, 540);
 		
 	}
 
