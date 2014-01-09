@@ -17,6 +17,7 @@ import com.core.ManagerTarget;
 import com.example.demogame.SinglePlayerScreen.GameState;
 import com.example.motion.Animation;
 import com.example.motion.EffectsTion;
+import com.example.motion.NumberDraw;
 
 public class MultiPlayerScreen extends Screen {
 
@@ -24,7 +25,7 @@ public class MultiPlayerScreen extends Screen {
 		READY, RUNNING, PAUSED, GAMEOVER
 	}
 
-	final int INT_TIME_UP = 30;
+	final int INT_TIME_UP = 20;
 	final int INT_TIME_UP_READY = 3;
 	final int NUMBER_HOLE = 30;
 	final int NUMBER_TARGET = 10;
@@ -35,6 +36,8 @@ public class MultiPlayerScreen extends Screen {
 	int intTime;
 	int score_1;
 	int score_2;
+	NumberDraw numberDraw;
+	NumberDraw numberDrawBig;
 	
 	public GameState gameState = GameState.RUNNING;
 	
@@ -44,8 +47,11 @@ public class MultiPlayerScreen extends Screen {
 	public EffectsTion effectTarget_12;
 	public EffectsTion effectTarget_21;
 	public EffectsTion effectTarget_22;
-	
+
 	public Image hole;
+	public Image winplayer;
+	public Image loseplayer;
+	
 	ManagerHoles[] holelist;
 	ManagerTarget[] targetlist;
 	Paint paint;
@@ -76,6 +82,8 @@ public class MultiPlayerScreen extends Screen {
 		intTime = 100;
 		score_1 = 0;
 		score_2 = 0;
+		numberDraw = new NumberDraw(g);
+		numberDrawBig = new NumberDraw(g, 1);
 		
 		hole= g.newImage("hole.png", ImageFormat.RGB565);
 		
@@ -93,6 +101,8 @@ public class MultiPlayerScreen extends Screen {
 		target1_die = g.newImage("target1_success.png", ImageFormat.RGB565);
 		target2_die = g.newImage("target2_success.png", ImageFormat.RGB565);
 
+		winplayer = g.newImage("victory_screen.png", ImageFormat.RGB565);
+		loseplayer = g.newImage("lose_screen.png", ImageFormat.RGB565);
 		
 		effectTarget_11 = new EffectsTion(g.newImage("target1_success.png", ImageFormat.RGB565));
 		effectTarget_12 = new EffectsTion(g.newImage("target2_success.png", ImageFormat.RGB565));
@@ -354,7 +364,8 @@ public class MultiPlayerScreen extends Screen {
 			g.drawImage(hole, x, 680+y);
 			g.drawFlipImage(hole, x, y);
 		}
-		g.drawString("" + intTime, 400, 750, paint);
+		//g.drawString("" + intTime, 400, 750, paint);
+		numberDrawBig.drawNumber(g, intTime, 340, 590);
 	}
 	
 
@@ -389,8 +400,11 @@ public class MultiPlayerScreen extends Screen {
 		effectTarget_22.paintFlip(g);
 		
 		
-		g.drawString("" + intTime, 25, 660, paint);
-		g.drawString("Score: " + score_1, 150, 660, paint);
+		numberDraw.drawNumber(g, intTime, 5, 625);
+		numberDraw.drawNumber(g, score_1, 200, 625);
+
+		numberDraw.drawNumberFlip(g, intTime, 760, 625);
+		numberDraw.drawNumberFlip(g, score_2, 580, 625);
 		//g.drawFlipString("Score: " + score_1, 150, 660);
 
 	}
@@ -420,8 +434,14 @@ public class MultiPlayerScreen extends Screen {
 		}
 		
 
-		g.drawString("" + intTime, 25, 660, paint);
-		g.drawString("Score: " + score_1, 150, 660, paint);
+		//g.drawString("" + intTime, 25, 660, paint);
+		//g.drawString("Score: " + score_1, 150, 660, paint);
+
+		numberDraw.drawNumber(g, intTime, 5, 625);
+		numberDraw.drawNumber(g, score_1, 200, 625);
+
+		numberDraw.drawNumberFlip(g, intTime, 760, 625);
+		numberDraw.drawNumberFlip(g, score_2, 580, 625);
 		
 		paint.setTextSize(50);
 		g.drawString("Pause", 400, 640, paint);
@@ -438,6 +458,21 @@ public class MultiPlayerScreen extends Screen {
 	 */
 	public void paintGameOver(Graphics g,float deltaTime)
 	{
+		numberDrawBig.drawNumber(g, score_1, 350, 690);
+		numberDrawBig.drawNumberFlip(g, score_2, 400, 500);
+		if(score_1 > score_2)
+		{
+			g.drawImage(winplayer, 100, 780);
+			g.drawFlipImage(loseplayer, 100, 100);
+		}
+		if(score_1 < score_2)
+		{
+			g.drawImage(loseplayer, 100, 780);
+			g.drawFlipImage(winplayer, 100, 100);
+		}
+		if(score_1 ==  score_2){
+			
+		}
 		
 	}
 	/**

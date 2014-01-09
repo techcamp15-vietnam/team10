@@ -3,7 +3,7 @@ package com.core;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class HighScoreManager {
+public class HighScoreManager{
 	private int highScore;
 	Context _context;
 	/**
@@ -14,8 +14,8 @@ public class HighScoreManager {
 	public Boolean checkHighscore(int score)
 	{
 		 int oldhighscore = getHighscore();
-		 if(oldhighscore > score)
-		 {
+		 System.out.println("qua lan nay");
+		 if(oldhighscore > score){
 			 return false;
 		 }
 		 else {
@@ -35,6 +35,7 @@ public class HighScoreManager {
 		if(preferences.getInt("score", -1) == -1)
 		{
 			//Neu la lan dau tien thi tra ve 0. Khong hien thi highscore hoac hien
+			System.out.println("lan dau");
 			return 0;
 		}
 		else
@@ -53,7 +54,7 @@ public class HighScoreManager {
 	{
 		SharedPreferences preferences = this._context.getSharedPreferences("hitdown", Context.MODE_PRIVATE);  
 		SharedPreferences.Editor editor = preferences.edit();
-		editor.putInt("var1", score);
+		editor.putInt("score", score);
 		editor.commit();
 	}
 

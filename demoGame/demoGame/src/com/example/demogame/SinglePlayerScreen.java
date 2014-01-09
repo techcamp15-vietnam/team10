@@ -12,11 +12,13 @@ import com.Group10.framework.Image;
 import com.Group10.framework.Screen;
 import com.Group10.framework.Graphics.ImageFormat;
 import com.Group10.framework.Input.TouchEvent;
+import com.core.HighScoreManager;
 import com.core.ManagerHoles;
 import com.core.ManagerMap;
 import com.core.ManagerTarget;
 import com.example.motion.Animation;
 import com.example.motion.EffectsTion;
+import com.example.motion.NumberDraw;
 
 public class SinglePlayerScreen extends Screen {
 	enum GameState {
@@ -32,6 +34,7 @@ public class SinglePlayerScreen extends Screen {
 	int typePlayer;
 	public GameState gameState = GameState.READY;
 	public Image hole;
+	public Image timeUp;
 	public Image target1_1,target1_11, target1_2,target1_21, target1_3, target2_1, target2_2,target2_11, target2_21, target2_3, target1_die, target2_die;
 	public Animation[] targetAnimation;
 	public EffectsTion effectTarget_1;
@@ -40,11 +43,16 @@ public class SinglePlayerScreen extends Screen {
 	public float timeplay;
 	int intTime;
 	int score;
+	NumberDraw numberDraw;
+	NumberDraw numberDrawBig;
 	
 	ManagerHoles[] holelist;
 	ManagerTarget[] targetlist;
 	Paint paint;
 	public ManagerMap managerMap;
+	
+	HighScoreManager highScoreManger;
+	
 	/**
 	 * @padam Game
 	 * @author 10-c Pham Thanh Thuong
@@ -69,6 +77,8 @@ public class SinglePlayerScreen extends Screen {
 		timeplay = 0;
 		intTime = 100;
 		score = 0;
+		numberDraw = new NumberDraw(g);
+		numberDrawBig = new NumberDraw(g, 1);
 		
 		Assets.SinglePlayerBackground = g.newImage("menuBackground.png", ImageFormat.RGB565);
 		hole= g.newImage("hole.png", ImageFormat.RGB565);
@@ -85,6 +95,7 @@ public class SinglePlayerScreen extends Screen {
 		target2_3 = g.newImage("target2_3.png", ImageFormat.RGB565);
 		target1_die = g.newImage("target1_success.png", ImageFormat.RGB565);
 		target2_die = g.newImage("target2_success.png", ImageFormat.RGB565);
+		timeUp = g.newImage("timeUpText.png", ImageFormat.RGB565);
 
 		effectTarget_1 = new EffectsTion(g.newImage("target1_success.png", ImageFormat.RGB565));
 		effectTarget_2 = new EffectsTion(g.newImage("target2_success.png", ImageFormat.RGB565));
@@ -95,6 +106,8 @@ public class SinglePlayerScreen extends Screen {
 		managerMap.initwithtarget(NUMBER_TARGET);
 		targetlist = managerMap.gettargetlist();
 		targetAnimation = initTarget(targetlist);
+		
+		highScoreManger = new HighScoreManager();
 	}
 	
 
@@ -326,7 +339,9 @@ public class SinglePlayerScreen extends Screen {
 			g.drawImage(hole, x, y);
 		}
 	
-		g.drawString("" + intTime, 400, 750, paint);
+		//g.drawString("" + intTime, 400, 750, paint);
+		numberDrawBig.drawNumber(g, intTime, 340, 580);
+		
 	}
 
 	/**
@@ -354,8 +369,8 @@ public class SinglePlayerScreen extends Screen {
 		effectTarget_1.paint(g);
 		effectTarget_2.paint(g);
 		
-		g.drawString("" + intTime, 750, 50, paint);
-		g.drawString("Score: " + score, 500, 50, paint);
+		numberDraw.drawNumber(g, intTime, 710, 10);
+		numberDraw.drawNumber(g, score, 600, 10);
 		
 	}
 	
@@ -382,8 +397,13 @@ public class SinglePlayerScreen extends Screen {
 			g.drawImage(targetAnimation[i].getImage(), x, y);
 		}
 
-		g.drawString("" + intTime, 750, 50, paint);
-		g.drawString("Score: " + score, 500, 50, paint);
+
+		numberDraw.drawNumber(g, intTime, 710, 10);
+		numberDraw.drawNumber(g, score, 600, 10);
+		
+		//g.drawString("" + intTime, 750, 50, paint);
+		//g.drawString("Score: " + score, 500, 50, paint);
+		
 		g.drawString("Pause", 400, 640, paint);
 		paint.setTextSize(100);
 		g.drawString("Back Menu", 400, 1100, paint);
@@ -399,8 +419,17 @@ public class SinglePlayerScreen extends Screen {
 	public void paintGameOver(Graphics g,float deltaTime)
 	{
 		//paint.setTextSize(350);
-		g.drawString("Time UP", 400, 400, paint);
-		g.drawString("Your Score:  " + score, 400, 800, paint);
+		//g.drawString("Time UP", 400, 400, paint);
+		g.drawImage(timeUp, 100, 540);
+		/*
+		if(highScoreManger.checkHighscore(score)){
+			g.drawString("Your Hight Score:  " + score, 400, 800, paint);
+		}
+		else
+		{
+			g.drawString("Your Score:  " + score, 400, 800, paint);
+		}
+		*/
 	}
 	
 	

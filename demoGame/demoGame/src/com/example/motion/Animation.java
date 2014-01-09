@@ -75,7 +75,7 @@ public class Animation {
 		numberAction = 0;
 		resetFrame();
 	}
-	public void resetFrame(){
+	private void resetFrame(){
 		currentFrame = 0;
 		animTime = 0;
 	}
