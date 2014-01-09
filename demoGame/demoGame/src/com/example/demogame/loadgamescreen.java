@@ -88,6 +88,7 @@ public class loadgamescreen extends Screen{
 						Assets.menuSinglePlayerButton = g.newImage("menuSinglePlayerButton.png", ImageFormat.RGB565);
 						//game.setScreen(new SinglePlayerScreen(game));
 						game.setScreen(new ChoosePlayerScreen(game));
+						return;
 					}
 				}
 				else
@@ -101,6 +102,7 @@ public class loadgamescreen extends Screen{
 					if(Assets.menuMultiplayerButton.getid()==1) {
 						Assets.menuMultiplayerButton = g.newImage("menuMultiplayerButton.png", ImageFormat.RGB565);
 						game.setScreen(new ReadyMultiPlayerScreen(game));
+						return;
 					}
 				}
 				else
@@ -114,6 +116,7 @@ public class loadgamescreen extends Screen{
 					if(Assets.menuSettingButton.getid()==1) {
 						Assets.menuSettingButton = g.newImage("menuSettingButton.png", ImageFormat.RGB565);
 						game.setScreen(new SettingScreen(game));
+						return;
 					}
 				}
 				else
@@ -127,6 +130,7 @@ public class loadgamescreen extends Screen{
 					if(Assets.menuHelpButton.getid()==1) {
 						Assets.menuHelpButton = g.newImage("menuHelpButton.png", ImageFormat.RGB565);
 						game.setScreen(new SettingScreen(game));
+						return;
 					}
 				}
 				else

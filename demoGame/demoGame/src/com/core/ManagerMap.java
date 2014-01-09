@@ -109,8 +109,7 @@ public class ManagerMap {
 		// lay duoc mang vi tri cac target
 		for (int j = 0; j < numTarget; j++) {
 			int holepos = targetlist[j].getTarget().getY() *10 + targetlist[j].getTarget().getX();
-			posArr[i] = holepos;
-			System.out.println("hole postion " + holepos);
+			posArr[j] = holepos;
 		}
 		int[] pos = randomm(numHoles, posArr, 1);
 		System.out.println(pos[0]);

@@ -32,7 +32,6 @@ public class HeplScreen extends Screen {
 	public void update(float deltaTime) {
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();	
 		int len = touchEvents.size();
-		// TODO Auto-generated method stub
 		
 	}
 

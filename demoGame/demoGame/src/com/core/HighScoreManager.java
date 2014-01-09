@@ -1,16 +1,23 @@
 package com.core;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 public class HighScoreManager{
 	private int highScore;
-	Context _context;
+	Activity _context;
 	/**
 	 check high score
 	@param checkHighscore
 	@author 10-B Phan Ha
 	*/
+	public HighScoreManager(Activity acc)
+	{
+		super();
+		this._context = acc;
+	}
+	
 	public Boolean checkHighscore(int score)
 	{
 		 int oldhighscore = getHighscore();

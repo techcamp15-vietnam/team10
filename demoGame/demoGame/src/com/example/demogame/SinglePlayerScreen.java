@@ -25,7 +25,7 @@ public class SinglePlayerScreen extends Screen {
 		READY, RUNNING, PAUSED, GAMEOVER
 	}
 
-	final int INT_TIME_UP = 25;
+	final int INT_TIME_UP = 20;
 	final int INT_TIME_UP_READY = 3;
 	final int NUMBER_HOLE = 70;
 	final int NUMBER_TARGET = 30;
@@ -43,8 +43,14 @@ public class SinglePlayerScreen extends Screen {
 	public float timeplay;
 	int intTime;
 	int score;
+	boolean isNewHighScore;
+	Image newHightScore;
+	Image scoreImage;
+	Image yourScore;
 	NumberDraw numberDraw;
 	NumberDraw numberDrawBig;
+	
+	Image backMenubutton, pause, replay;
 	
 	ManagerHoles[] holelist;
 	ManagerTarget[] targetlist;
@@ -77,6 +83,10 @@ public class SinglePlayerScreen extends Screen {
 		timeplay = 0;
 		intTime = 100;
 		score = 0;
+		isNewHighScore = false;
+		newHightScore = g.newImage("newHightScore.png", ImageFormat.RGB565);
+		scoreImage = g.newImage("score.png", ImageFormat.RGB565);
+		yourScore = g.newImage("yourScore.png", ImageFormat.RGB565);
 		numberDraw = new NumberDraw(g);
 		numberDrawBig = new NumberDraw(g, 1);
 		
@@ -97,6 +107,10 @@ public class SinglePlayerScreen extends Screen {
 		target2_die = g.newImage("target2_success.png", ImageFormat.RGB565);
 		timeUp = g.newImage("timeUpText.png", ImageFormat.RGB565);
 
+		backMenubutton = g.newImage("backMenuButton.png", ImageFormat.RGB565);
+		pause = g.newImage("pause.png", ImageFormat.RGB565);
+		replay = g.newImage("replayButton.png", ImageFormat.RGB565);
+		
 		effectTarget_1 = new EffectsTion(g.newImage("target1_success.png", ImageFormat.RGB565));
 		effectTarget_2 = new EffectsTion(g.newImage("target2_success.png", ImageFormat.RGB565));
 		
@@ -107,7 +121,7 @@ public class SinglePlayerScreen extends Screen {
 		targetlist = managerMap.gettargetlist();
 		targetAnimation = initTarget(targetlist);
 		
-		highScoreManger = new HighScoreManager();
+		highScoreManger = new HighScoreManager(Assets.acc);
 	}
 	
 
@@ -202,6 +216,7 @@ public class SinglePlayerScreen extends Screen {
 		if(intTime <= 0 )
 		{
 			gameState = GameState.GAMEOVER;
+			isNewHighScore = highScoreManger.checkHighscore(score);
 			return;
 		}
 		
@@ -230,9 +245,13 @@ public class SinglePlayerScreen extends Screen {
 					
 					
 					if(targetlist[j].getTarget().getType()==0){
+
+						Assets.playSoundCat();
 						effectTarget_1.addEffect(x*80, y*120);
 					}
 					else{
+
+						Assets.playSoundMouse();
 						effectTarget_2.addEffect(x*80, y*120);
 					}
 					
@@ -277,7 +296,7 @@ public class SinglePlayerScreen extends Screen {
 			TouchEvent event = TouchEvents.get(i);
 			//When TOUCH_DOWN
 			if (event.type == TouchEvent.TOUCH_DOWN) {
-				if((event.x>300)&&(event.x<500)&&(event.y>1050)&&(event.y<1150)) //player1
+				if((event.x>10)&&(event.x<210)&&(event.y>1050)&&(event.y<1250)) //player1
 				{
 					game.setScreen(new loadgamescreen(game));
 					break;
@@ -296,7 +315,23 @@ public class SinglePlayerScreen extends Screen {
 	 */
 	public void updateGameOver(List<TouchEvent> TouchEvents, float deltaTime)
 	{
-		
+		int len = TouchEvents.size();
+		for (int i = 0; i < len; i++) {
+		TouchEvent event = TouchEvents.get(i);
+		//When TOUCH_DOWN
+		if (event.type == TouchEvent.TOUCH_DOWN) {
+			if((event.x>10)&&(event.x<210)&&(event.y>1050)&&(event.y<1250)) //player1
+			{
+				game.setScreen(new loadgamescreen(game));
+				break;
+			}
+			if((event.x>600)&&(event.x<800)&&(event.y>1050)&&(event.y<1250)) //player1
+			{
+				game.setScreen(new ChoosePlayerScreen(game));
+				break;
+			}
+		}	
+	}
 	}
 	
 	
@@ -370,6 +405,7 @@ public class SinglePlayerScreen extends Screen {
 		effectTarget_2.paint(g);
 		
 		numberDraw.drawNumber(g, intTime, 710, 10);
+		g.drawImage(scoreImage, 500, 10);
 		numberDraw.drawNumber(g, score, 600, 10);
 		
 	}
@@ -400,13 +436,13 @@ public class SinglePlayerScreen extends Screen {
 
 		numberDraw.drawNumber(g, intTime, 710, 10);
 		numberDraw.drawNumber(g, score, 600, 10);
+		numberDraw.drawNumber(g, score, 600, 10);
 		
-		//g.drawString("" + intTime, 750, 50, paint);
-		//g.drawString("Score: " + score, 500, 50, paint);
 		
-		g.drawString("Pause", 400, 640, paint);
+		g.drawImage(pause, 100, 540);
 		paint.setTextSize(100);
-		g.drawString("Back Menu", 400, 1100, paint);
+
+		g.drawImage(backMenubutton, 10, 1050);   //210>x>10, 1250>y>1050
 		paint.setTextSize(50);
 	}
 	
@@ -418,18 +454,18 @@ public class SinglePlayerScreen extends Screen {
 	 */
 	public void paintGameOver(Graphics g,float deltaTime)
 	{
-		//paint.setTextSize(350);
-		//g.drawString("Time UP", 400, 400, paint);
-		g.drawImage(timeUp, 100, 540);
-		/*
-		if(highScoreManger.checkHighscore(score)){
-			g.drawString("Your Hight Score:  " + score, 400, 800, paint);
+		g.drawImage(timeUp, 100, 300);
+		if(isNewHighScore)
+		{
+			g.drawImage(newHightScore, 100, 550);
 		}
 		else
 		{
-			g.drawString("Your Score:  " + score, 400, 800, paint);
+			g.drawImage(yourScore, 100, 550);
 		}
-		*/
+		numberDrawBig.drawNumber(g, score, 350, 670);
+		g.drawImage(backMenubutton, 10, 1050);   //210>x>10, 1250>y>1050
+		g.drawImage(replay, 600, 1050);   //800>x>600, 1250>y>1050
 	}
 	
 	

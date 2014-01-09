@@ -14,7 +14,6 @@ import com.Group10.framework.Input.TouchEvent;
 import com.core.ManagerHoles;
 import com.core.ManagerMap;
 import com.core.ManagerTarget;
-import com.example.demogame.SinglePlayerScreen.GameState;
 import com.example.motion.Animation;
 import com.example.motion.EffectsTion;
 import com.example.motion.NumberDraw;
@@ -36,8 +35,12 @@ public class MultiPlayerScreen extends Screen {
 	int intTime;
 	int score_1;
 	int score_2;
+	Image scoreImage;
 	NumberDraw numberDraw;
 	NumberDraw numberDrawBig;
+	
+
+	Image backMenubutton, pause, replay;
 	
 	public GameState gameState = GameState.RUNNING;
 	
@@ -51,6 +54,7 @@ public class MultiPlayerScreen extends Screen {
 	public Image hole;
 	public Image winplayer;
 	public Image loseplayer;
+	public Image drawn;
 	
 	ManagerHoles[] holelist;
 	ManagerTarget[] targetlist;
@@ -71,6 +75,8 @@ public class MultiPlayerScreen extends Screen {
 		Assets.MultiPlayerBackground = g.newImage("multiplayBackground2.png", ImageFormat.RGB565);
 	
 
+		scoreImage = g.newImage("score.png", ImageFormat.RGB565);
+		
 		paint = new Paint();
 		paint.setTextSize(40);
 		paint.setTextAlign(Paint.Align.CENTER);
@@ -101,8 +107,13 @@ public class MultiPlayerScreen extends Screen {
 		target1_die = g.newImage("target1_success.png", ImageFormat.RGB565);
 		target2_die = g.newImage("target2_success.png", ImageFormat.RGB565);
 
+		backMenubutton = g.newImage("backMenuButton.png", ImageFormat.RGB565);
+		pause = g.newImage("pause.png", ImageFormat.RGB565);
+		replay = g.newImage("replayButton.png", ImageFormat.RGB565);
+
 		winplayer = g.newImage("victory_screen.png", ImageFormat.RGB565);
 		loseplayer = g.newImage("lose_screen.png", ImageFormat.RGB565);
+		drawn = g.newImage("drawn.png", ImageFormat.RGB565);
 		
 		effectTarget_11 = new EffectsTion(g.newImage("target1_success.png", ImageFormat.RGB565));
 		effectTarget_12 = new EffectsTion(g.newImage("target2_success.png", ImageFormat.RGB565));
@@ -240,6 +251,7 @@ public class MultiPlayerScreen extends Screen {
 							// plus score
 							score_2++;
 							effectTarget_22.addEffect(x*80, y*60);
+							Assets.playSoundMouse();
 						}
 						else
 						{
@@ -247,6 +259,7 @@ public class MultiPlayerScreen extends Screen {
 								//minus score
 								score_2--;
 							effectTarget_21.addEffect(x*80, y*60);
+							Assets.playSoundCat();
 						}
 						
 						managerMap.changePos(j); //chage position
@@ -266,6 +279,7 @@ public class MultiPlayerScreen extends Screen {
 							// plus score
 							score_1++;
 							effectTarget_11.addEffect(x*80, y*60+680);
+							Assets.playSoundCat();
 						}
 						else
 						{
@@ -273,6 +287,7 @@ public class MultiPlayerScreen extends Screen {
 								//minus score
 								score_1--;
 							effectTarget_12.addEffect(x*80, y*60+680);
+							Assets.playSoundMouse();
 						}
 						
 						managerMap.changePos(j); //chage position
@@ -305,7 +320,7 @@ public class MultiPlayerScreen extends Screen {
 			TouchEvent event = TouchEvents.get(i);
 			//When TOUCH_DOWN
 			if (event.type == TouchEvent.TOUCH_DOWN) {
-				if((event.x>300)&&(event.x<500)&&(event.y>1050)&&(event.y<1150)) //player1
+				if((event.x>10)&&(event.x<210)&&(event.y>1050)&&(event.y<1250)) //player1
 				{
 					game.setScreen(new loadgamescreen(game));
 					break;
@@ -322,7 +337,23 @@ public class MultiPlayerScreen extends Screen {
 	 */
 	public void updateGameOver(List<TouchEvent> TouchEvents, float deltaTime)
 	{
-		
+		int len = TouchEvents.size();
+		for (int i = 0; i < len; i++) {
+		TouchEvent event = TouchEvents.get(i);
+		//When TOUCH_DOWN
+		if (event.type == TouchEvent.TOUCH_DOWN) {
+			if((event.x>10)&&(event.x<210)&&(event.y>1050)&&(event.y<1250)) //player1
+			{
+				game.setScreen(new loadgamescreen(game));
+				break;
+			}
+			if((event.x>600)&&(event.x<800)&&(event.y>1050)&&(event.y<1250)) //player1
+			{
+				game.setScreen(new ChoosePlayerScreen(game));
+				break;
+			}
+		}	
+	}
 	}
 	
 	/**
@@ -401,11 +432,14 @@ public class MultiPlayerScreen extends Screen {
 		
 		
 		numberDraw.drawNumber(g, intTime, 5, 625);
+		g.drawImage(scoreImage, 100, 625);
 		numberDraw.drawNumber(g, score_1, 200, 625);
 
 		numberDraw.drawNumberFlip(g, intTime, 760, 625);
+		g.drawFlipImage(scoreImage, 620, 630);
 		numberDraw.drawNumberFlip(g, score_2, 580, 625);
-		//g.drawFlipString("Score: " + score_1, 150, 660);
+		
+
 
 	}
 	
@@ -438,16 +472,17 @@ public class MultiPlayerScreen extends Screen {
 		//g.drawString("Score: " + score_1, 150, 660, paint);
 
 		numberDraw.drawNumber(g, intTime, 5, 625);
+		g.drawImage(scoreImage, 100, 625);
 		numberDraw.drawNumber(g, score_1, 200, 625);
 
 		numberDraw.drawNumberFlip(g, intTime, 760, 625);
 		numberDraw.drawNumberFlip(g, score_2, 580, 625);
-		
-		paint.setTextSize(50);
-		g.drawString("Pause", 400, 640, paint);
+
+		g.drawImage(pause, 100, 540);
 		paint.setTextSize(100);
-		g.drawString("Back Menu", 400, 1100, paint);
-		paint.setTextSize(40);
+
+		g.drawImage(backMenubutton, 10, 1050);   //210>x>10, 1250>y>1050
+		paint.setTextSize(50);
 	}
 	
 
@@ -471,8 +506,13 @@ public class MultiPlayerScreen extends Screen {
 			g.drawFlipImage(winplayer, 100, 100);
 		}
 		if(score_1 ==  score_2){
-			
+
+			g.drawImage(drawn, 100, 780);
+			g.drawFlipImage(drawn, 100, 275);
 		}
+		
+		g.drawImage(backMenubutton, 10, 1050);   //210>x>10, 1250>y>1050
+		g.drawImage(replay, 600, 1050);   //800>x>600, 1250>y>1050
 		
 	}
 	/**
