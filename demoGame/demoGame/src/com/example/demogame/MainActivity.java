@@ -27,7 +27,7 @@ public class MainActivity extends AndroidGame {
 			Assets.load(this);
 			firstTimeCreate = false;
 		}
-
+		Assets.playMusic();
 		return new loadgamescreen(this);
 
 	}

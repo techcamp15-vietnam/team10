@@ -43,7 +43,41 @@ public class SettingScreen extends Screen {
 	public void update(float deltaTime) {
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();	
 		int len = touchEvents.size();
-		// TODO Auto-generated method stub
+		for (int i = 0; i < len; i++) {
+			TouchEvent event = touchEvents.get(i);
+			//When TOUCH_DOWN
+			if (event.type == TouchEvent.TOUCH_DOWN) {
+				if((event.x>250)&&(event.x <700)&&(event.y>500)&&(event.y<580))
+				{
+					//change mute music
+					if(Assets.isMuteMusic)
+					{
+						Assets.muteMusic();
+					}
+					else
+					{
+						Assets.unmuteMusic();
+					}
+				}
+				if((event.x>250)&&(event.x <700)&&(event.y>700)&&(event.y<780))
+				{
+					//change mute sound
+					if(Assets.isMuteSound)
+					{
+						Assets.muteSound();
+					}
+					else
+					{
+						Assets.unmuteSound();
+					}
+				}
+				if((event.x>10)&&(event.x<210)&&(event.y>1050)&&(event.y<1250)) //
+				{
+					game.setScreen(new loadgamescreen(game));
+					break;
+				}
+			}
+		}
 		
 	}
 
@@ -59,10 +93,24 @@ public class SettingScreen extends Screen {
 		g.drawImage(Assets.SettingBackground, 0, 0);
 
 		g.drawImage(backMenuButton, 10, 1050);   //210>x>10, 1250>y>1050
-		g.drawImage(musicLabel, 250, 500);
-		g.drawImage(soundLabel, 250, 700);
-		g.drawImage(tick, 600, 500);
-		g.drawImage(untick, 600, 700);
+		g.drawImage(musicLabel, 250, 500);  //650 > x>250   580>y>500
+		g.drawImage(soundLabel, 250, 700);  //650 > x>250   780>y>700
+		if(Assets.isMuteMusic)
+		{
+			g.drawImage(tick, 600, 500);
+		}
+		else
+		{
+			g.drawImage(untick, 600, 500);
+		}
+		if(Assets.isMuteSound)
+		{
+			g.drawImage(tick, 600, 700);
+		}
+		else
+		{
+			g.drawImage(untick, 600, 700);
+		}
 	}
 
 	

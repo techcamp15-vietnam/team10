@@ -17,17 +17,29 @@ public class SettingManager {
 		super();
 		this._context = acc;
 	}
-	
-	
-	public void setSetting(Boolean sound, int time, Boolean music)
+
+	public void setSound(Boolean sound)
 	{
 		SharedPreferences preferences = this._context.getSharedPreferences("hitdown", Context.MODE_PRIVATE);  
 		SharedPreferences.Editor editor = preferences.edit();
 		editor.putBoolean("sound", sound);
+		editor.commit();
+	}
+	public void setMusic(Boolean music)
+	{
+		SharedPreferences preferences = this._context.getSharedPreferences("hitdown", Context.MODE_PRIVATE);  
+		SharedPreferences.Editor editor = preferences.edit();
 		editor.putBoolean("music", music);
+		editor.commit();
+	}
+	public void setTime(int time)
+	{
+		SharedPreferences preferences = this._context.getSharedPreferences("hitdown", Context.MODE_PRIVATE);  
+		SharedPreferences.Editor editor = preferences.edit();
 		editor.putInt("time", time);
 		editor.commit();
 	}
+	
 	public Boolean getsound()
 	{
 		SharedPreferences preferences = this._context.getSharedPreferences("hitdown", Context.MODE_PRIVATE);  

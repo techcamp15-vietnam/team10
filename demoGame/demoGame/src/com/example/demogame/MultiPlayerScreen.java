@@ -349,7 +349,7 @@ public class MultiPlayerScreen extends Screen {
 			}
 			if((event.x>600)&&(event.x<800)&&(event.y>1050)&&(event.y<1250)) //player1
 			{
-				game.setScreen(new ChoosePlayerScreen(game));
+				game.setScreen(new ReadyMultiPlayerScreen(game));
 				break;
 			}
 		}	

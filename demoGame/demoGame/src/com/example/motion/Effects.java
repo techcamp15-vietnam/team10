@@ -18,7 +18,7 @@ public class Effects {
 	public Effects(int x, int y) {
 		this.x = x;
 		this.y = y;
-		numberTime = 15;
+		numberTime = 10;
 	}
 	public void update()
 	{

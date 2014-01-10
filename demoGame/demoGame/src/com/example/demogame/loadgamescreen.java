@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.Group10.framework.Game;
 import com.Group10.framework.Graphics;
+import com.Group10.framework.Image;
 import com.Group10.framework.Screen;
 import com.Group10.framework.Graphics.ImageFormat;
 import com.Group10.framework.Input.TouchEvent;
@@ -15,7 +16,7 @@ import com.Group10.framework.Input.TouchEvent;
  */
 
 public class loadgamescreen extends Screen{
-	
+	Image banner;
 	/**
 	 * @padam Game
 	 * @author 10-c Pham Thanh Thuong
@@ -24,6 +25,9 @@ public class loadgamescreen extends Screen{
 	public loadgamescreen(Game game) {	
 		super(game);
 		System.gc();
+		
+		Assets.playMusic();
+		
 		Graphics g = game.getGraphics();
 		Assets.menugame = g.newImage("menuBackground.png", ImageFormat.RGB565);
 		Assets.menuSinglePlayerButton = g.newImage("menuSinglePlayerButton.png", ImageFormat.RGB565);
@@ -34,6 +38,7 @@ public class loadgamescreen extends Screen{
 		Assets.menuSettingButton.setid(0);
 		Assets.menuHelpButton = g.newImage("menuHelpButton.png", ImageFormat.RGB565);
 		Assets.menuHelpButton.setid(0);
+		banner = g.newImage("banner.png", ImageFormat.RGB565);
 	}
 	
 	
@@ -129,7 +134,7 @@ public class loadgamescreen extends Screen{
 				{
 					if(Assets.menuHelpButton.getid()==1) {
 						Assets.menuHelpButton = g.newImage("menuHelpButton.png", ImageFormat.RGB565);
-						game.setScreen(new SettingScreen(game));
+						game.setScreen(new HeplScreen(game));
 						return;
 					}
 				}
@@ -157,6 +162,7 @@ public class loadgamescreen extends Screen{
 		g.drawImage(Assets.menuMultiplayerButton, 100, 550);  //w=600 h=200  700>x>100  750>y>550
 		g.drawImage(Assets.menuSettingButton, 100, 800);  //w=600 h=200  700>x>100  1000>y>800
 		g.drawImage(Assets.menuHelpButton, 100, 1050);  //w=600 h=200  700>x>100  1250>y>1050
+		g.drawImage(banner, 100, 10);
 		// TODO Auto-generated method stub
 		
 	}	

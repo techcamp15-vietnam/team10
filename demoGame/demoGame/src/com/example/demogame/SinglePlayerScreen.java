@@ -29,7 +29,9 @@ public class SinglePlayerScreen extends Screen {
 	final int INT_TIME_UP_READY = 3;
 	final int NUMBER_HOLE = 70;
 	final int NUMBER_TARGET = 30;
-	
+	final int changeY = 80;
+	final int SIZECOMBO = 4;
+	final int TIME_COMBO_UP = 200;
 	
 	int typePlayer;
 	public GameState gameState = GameState.READY;
@@ -47,8 +49,15 @@ public class SinglePlayerScreen extends Screen {
 	Image newHightScore;
 	Image scoreImage;
 	Image yourScore;
+	Image highscore;
+	Image comboIMG;
 	NumberDraw numberDraw;
 	NumberDraw numberDrawBig;
+	
+
+	int setcombo;
+	int combo;
+	int time_combo;
 	
 	Image backMenubutton, pause, replay;
 	
@@ -87,8 +96,13 @@ public class SinglePlayerScreen extends Screen {
 		newHightScore = g.newImage("newHightScore.png", ImageFormat.RGB565);
 		scoreImage = g.newImage("score.png", ImageFormat.RGB565);
 		yourScore = g.newImage("yourScore.png", ImageFormat.RGB565);
+		highscore = g.newImage("highScore.png", ImageFormat.RGB565);
 		numberDraw = new NumberDraw(g);
 		numberDrawBig = new NumberDraw(g, 1);
+		
+		time_combo = 0;
+		setcombo = 0;
+		comboIMG = g.newImage("combo.png", ImageFormat.RGB565);
 		
 		Assets.SinglePlayerBackground = g.newImage("menuBackground.png", ImageFormat.RGB565);
 		hole= g.newImage("hole.png", ImageFormat.RGB565);
@@ -212,6 +226,15 @@ public class SinglePlayerScreen extends Screen {
 	{
 		timeplay = timeplay + deltaTime;
 		intTime = INT_TIME_UP - (int)(timeplay/100);	
+		if(time_combo > 0) time_combo--;
+		else 
+			{
+				if(setcombo > SIZECOMBO) 
+					{
+						//score = score + setcombo - SIZECOMBO;
+						setcombo = 0;
+					}
+			}
 		
 		if(intTime <= 0 )
 		{
@@ -239,7 +262,7 @@ public class SinglePlayerScreen extends Screen {
 			if (event.type == TouchEvent.TOUCH_DOWN) {
 				
 				int x = event.x/80;
-				int y = event.y/120;
+				int y = (event.y - changeY)/120;
 				int j = managerMap.checkTarget(x, y);
 				if(j > -1){ //hit target
 					
@@ -247,12 +270,12 @@ public class SinglePlayerScreen extends Screen {
 					if(targetlist[j].getTarget().getType()==0){
 
 						Assets.playSoundCat();
-						effectTarget_1.addEffect(x*80, y*120);
+						effectTarget_1.addEffect(x*80, y*120 + changeY);
 					}
 					else{
 
 						Assets.playSoundMouse();
-						effectTarget_2.addEffect(x*80, y*120);
+						effectTarget_2.addEffect(x*80, y*120 + changeY);
 					}
 					
 					
@@ -260,11 +283,18 @@ public class SinglePlayerScreen extends Screen {
 					if(targetlist[j].getTarget().getType()==this.typePlayer){
 						// plus score
 						score++;
+						setcombo++;
+						if(setcombo > SIZECOMBO)
+						{
+							score++;
+						}
+						if(setcombo == SIZECOMBO + 1) time_combo = TIME_COMBO_UP;
 					}
 					else
 					{
 						if(score > 0)
 							score--;
+						setcombo = 0;
 						//minus score
 					}
 					
@@ -370,7 +400,7 @@ public class SinglePlayerScreen extends Screen {
 		for(i=0; i<NUMBER_HOLE; i++)
 		{
 			int x = holelist[i].getHole().getX()*80;
-			int y = holelist[i].getHole().getY()*120;
+			int y = holelist[i].getHole().getY()*120 + changeY;
 			g.drawImage(hole, x, y);
 		}
 	
@@ -390,14 +420,14 @@ public class SinglePlayerScreen extends Screen {
 		for(i=0; i<NUMBER_HOLE; i++)
 		{
 			int x = holelist[i].getHole().getX()*80;
-			int y = holelist[i].getHole().getY()*120;
+			int y = holelist[i].getHole().getY()*120 + changeY;
 			g.drawImage(hole, x, y);
 		}
 		
 		for(i=0;i<NUMBER_TARGET; i++)
 		{			
 			int x = targetlist[i].getTarget().getX()*80;
-			int y = targetlist[i].getTarget().getY()*120;
+			int y = targetlist[i].getTarget().getY()*120 + changeY;
 			g.drawImage(targetAnimation[i].getImage(), x, y);
 		}
 
@@ -407,6 +437,13 @@ public class SinglePlayerScreen extends Screen {
 		numberDraw.drawNumber(g, intTime, 710, 10);
 		g.drawImage(scoreImage, 500, 10);
 		numberDraw.drawNumber(g, score, 600, 10);
+		
+		if((setcombo > SIZECOMBO)&&(time_combo > 0))
+		{
+			//COMBO
+			g.drawImage(comboIMG, 100, 10);
+			numberDrawBig.drawNumber(g, setcombo - SIZECOMBO, 500, 10);
+		}
 		
 	}
 	
@@ -422,14 +459,14 @@ public class SinglePlayerScreen extends Screen {
 		for(i=0; i<NUMBER_HOLE; i++)
 		{
 			int x = holelist[i].getHole().getX()*80;
-			int y = holelist[i].getHole().getY()*120;
+			int y = holelist[i].getHole().getY()*120 + changeY;
 			g.drawImage(hole, x, y);
 		}
 		
 		for(i=0;i<NUMBER_TARGET; i++)
 		{			
 			int x = targetlist[i].getTarget().getX()*80;
-			int y = targetlist[i].getTarget().getY()*120;
+			int y = targetlist[i].getTarget().getY()*120 + changeY;
 			g.drawImage(targetAnimation[i].getImage(), x, y);
 		}
 
@@ -461,6 +498,9 @@ public class SinglePlayerScreen extends Screen {
 		}
 		else
 		{
+			int hightscore = highScoreManger.getHighscore();
+			g.drawImage(highscore, 100, 100);
+			numberDrawBig.drawNumber(g, hightscore, 350, 220);
 			g.drawImage(yourScore, 100, 550);
 		}
 		numberDrawBig.drawNumber(g, score, 350, 670);

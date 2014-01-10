@@ -23,15 +23,15 @@ public class ManagerMap {
 		numHoles = numholes;
 		holeslist = new ManagerHoles[numHoles];
 		int[] holex = new int[numholes];
-		System.out.println("so holes la : " + numholes);
+		//System.out.println("so holes la : " + numholes);
 		holex = randomm(100, null, numholes);
-		System.out.println("end holex: ");
+	//	System.out.println("end holex: ");
 		//holey = randomm(8, null, numholes);
 		for (int i=0; i<numHoles; i++)
 		{
-			System.out.println("toa do la : "+ 100/10 +" "+ 100%10 + holex[i]);
+			//System.out.println("toa do la : "+ 100/10 +" "+ 100%10 + holex[i]);
 			holeslist[i] = new ManagerHoles();
-			//System.out.println("toa do la : "+ holex[numholes]/10 +" "+ holey[numholes]/8);
+		//	System.out.println("toa do la : "+ holex[i]/10);
 			holeslist[i].setHole(holex[i]/10, holex[i]%10);
 		}
 	}
@@ -69,8 +69,6 @@ public class ManagerMap {
 	*/
 	public ManagerTarget[] gettargetlist()
 	{
-		for(int i = 0; i<10; i++)
-			System.out.print(i +"   " + targetlist[i].getTarget().getType() + "   "+ targetlist[i].getTarget().getX() + "   " + targetlist[i].getTarget().getY()+ "\n");
 		return targetlist;
 	}
 	/**
@@ -104,53 +102,74 @@ public class ManagerMap {
 	*/
 	public void changePos(int i)
 	{
-		int[] posArr =new int[numTarget];
+		ArrayList<Integer> list = new ArrayList<Integer>(numTarget);
 		//khoi tao random postion. khong bi trung voi cac vi tri target khac.
 		// lay duoc mang vi tri cac target
 		for (int j = 0; j < numTarget; j++) {
-			int holepos = targetlist[j].getTarget().getY() *10 + targetlist[j].getTarget().getX();
-			posArr[j] = holepos;
+			int holepos = targetlist[j].getTarget().getX() *10 + targetlist[j].getTarget().getY();
+			//System.out.println("---- " + targetlist[j].getTarget().getX() +targetlist[j].getTarget().getY());
+			list.add(holepos);
+			//System.out.println("++++" + list.get(j));
 		}
-		int[] pos = randomm(numHoles, posArr, 1);
-		System.out.println(pos[0]);
-		Hole h = holeslist[pos[0]].getHole();
+		
+		int[] pos = randomm(numHoles, list, 1);
+		//System.out.println(pos[0]);
+		//Hole h = holeslist[pos[0]].getHole();
 		Target temptg = targetlist[i].getTarget();
-		targetlist[i].setTarget(h.getX(), h.getY(), temptg.getType());
+		//targetlist[i].setTarget(h.getX()pos, h.getY(), temptg.getType());
+		targetlist[i].setTarget(pos[0]/10, pos[0]%10, temptg.getType());
 	}
-	
-	public int[] randomm(int max,int[] intArray, int num){
-	    ArrayList<Integer> list = new ArrayList<Integer>(max);
-	    int[] result = new int[num];
-	    Random ran = new Random();
-    	for(int i = 0; i <= max; i++) {
-	        list.add(i);
-	    }
+	/**
+	 random without ducplicate
+	@param randomm
+	@author 10-B Phan Ha
+	*/
+	public int[] randomm(int max,ArrayList<Integer> intArray, int num){
+		Random ran = new Random();
+		int[] result = new int[num];
+		ArrayList<Integer> list = new ArrayList<Integer>(numHoles);
+	    //System.out.println("*" + max);
+
+		 
 	    if(intArray != null)
 	    {
-	    	System.out.println( "khoong log doan nay");
-		    for (int i = 0; i < intArray.length; i++) {
-		    	//System.out.println(intArray[i]);
-		    	for(int j = 0; j <= max; j++) {
-		            if(intArray[i] == list.get(j))
-		            {
-		            	list.remove(j);
-		            	max = max -1;
-		            }
-		        }
-			}
-		   // System.out.println(intArray.length);
-		    for(int i = 0; i < num; i++) {
-		    	System.out.println(num);
-		    	int x = ran.nextInt(max);
-		    	System.out.println(x);
-		    	result[i] = list.remove(x);
-		    	System.out.println(result[i]);
-		    	max = max -1;
-		    }
+	    	for(int i = 0; i < numHoles; i++) {
+				 int holepos = holeslist[i].getHole().getX() *10 + holeslist[i].getHole().getY();
+			        list.add(holepos);
+			    }
+	    //	System.out.println("size "+intArray.size()+list.size());
+	    	 for (Integer number : intArray) {
+	    		// int l =0;
+	    	     // System.out.println("Number = " + number);
+	        	for(int j = 0; j < max; j++) {
+	                if(number == list.get(j))
+	                {	                	
+	                	System.out.println("sss" + j+"--"+list.remove(j) +"-----"+ number);
+	                	max = max -1;
+	                	//l++;
+	                	break;
+	                }
+	            }
+	        	//if(l==0)System.out.println("ccc" + number);
+	    	}
+	    //	System.out.println("max--" +max);
+	    //	System.out.println("size "+list.size());
+	    for(int i = 0; i < num; i++) {
+	    	int x = ran.nextInt(max);
+	    	result[i] = list.remove(x);
+	    	// System.out.println(result[i]+"------------------------------");
+	    	max = max -1;
+	    	
+	    }
+	    
+		   // System.out.println("***" + max);
 	    }    
 	    else 
 	    {
-	    	System.out.println( "log doan nay");
+	    	for(int i = 0; i < max; i++) {
+	    		list.add(i);
+	    	}
+	    //	System.out.println( "log doan nay");
 	    	for (int i = 0; i < num; i++) {
 	    		 int x = ran.nextInt(max);
 	    		result[i] = list.remove(x);
@@ -160,13 +179,9 @@ public class ManagerMap {
 	    System.out.println("end random");
 	    return result;
 	}
-	/**
-	 check map clean
-	@param checkClean
-	@author 10-B Phan Ha
-	*/
-	public Boolean checkClean()
+	public ManagerTarget gettaget(int  i)
 	{
-		return true;
+		return targetlist[i];
 	}
 }
+
